@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyBehavior : MonoBehaviour
@@ -16,10 +15,20 @@ public class EnemyBehavior : MonoBehaviour
     [SerializeField]
     Boundries _horizontalBoundries;
 
+    [Header("Bullet Properties")]
+    public Transform bulletSpawnPoint;
+    public float fireRate = 0.2f;
+
+ 
+    private BulletManager bulletManager;
+
     // Start is called before the first frame update
     void Start()
     {
+       
+        bulletManager = GameObject.FindObjectOfType<BulletManager>();
         Reset();
+        InvokeRepeating("FireBullets", 0.0f, fireRate);
     }
 
     // Update is called once per frame
@@ -45,5 +54,11 @@ public class EnemyBehavior : MonoBehaviour
         _horizontalSpeed = Random.Range(_speedRange.x, _speedRange.y);
         transform.position = new Vector2(Random.Range(_horizontalBoundries.min, _horizontalBoundries.max), _verticalBoundries.max);
         Debug.Log("enemy ou of Boundries, reset");
+    }
+
+    void FireBullets()
+    {
+        var bullet = bulletManager.GetBullet(bulletSpawnPoint.position, BulletType.ENEMY);
+        Debug.Log("enemy fire");
     }
 }

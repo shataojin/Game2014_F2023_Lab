@@ -17,14 +17,15 @@ public class BulletBehaviour : MonoBehaviour
     public BulletDirection bulletDirection;
     public BulletManager bulletManager;
     public ScreenBounds bounds;
-    public EnemyBehavior enemyBehavior;
+   // public EnemyBehavior enemyBehavior;
     public Vector3 velocity;
+    public BulletType bulletType;
 
     void Start()
     {
-        SetDirection(bulletDirection);
+       // SetDirection(bulletDirection);
         bulletManager = FindObjectOfType<BulletManager>();
-        enemyBehavior = FindObjectOfType<EnemyBehavior>();
+       // enemyBehavior = FindObjectOfType<EnemyBehavior>();
     }
 
     void Update()
@@ -49,7 +50,7 @@ public class BulletBehaviour : MonoBehaviour
         if ((transform.position.x > bounds.horizontal.max) || (transform.position.x < bounds.horizontal.min) || 
             (transform.position.y > bounds.vertical.max) || (transform.position.y < bounds.vertical.min))
         {
-           bulletManager.ReturnBullet(this.gameObject);
+            bulletManager.ReturnBullet(this.gameObject, bulletType);
             Debug.Log("bullet CheckBounds ");
         }
     }
@@ -73,20 +74,27 @@ public class BulletBehaviour : MonoBehaviour
         }
     }
 
+    //void OnTriggerEnter2D(Collider2D collision)
+    //{
+    //    bulletManager.ReturnBullet(this.gameObject);
+    //    Debug.Log("bullet return :" + this.gameObject);
+    //}
+
+    ////collision with enmey 
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    if (other.CompareTag("Enemy"))
+    //    {
+    //        bulletManager.ReturnBullet(this.gameObject);
+    //        enemyBehavior.Reset();
+    //        Debug.Log("collision ! rest both ");
+    //    }
+    //}
     void OnTriggerEnter2D(Collider2D collision)
     {
-        bulletManager.ReturnBullet(this.gameObject);
-        Debug.Log("bullet return :" + this.gameObject);
-    }
-
-    //collision with enmey 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Enemy"))
+        if ((bulletType == BulletType.PLAYER) || (bulletType == BulletType.ENEMY && collision.gameObject.CompareTag("Player")))
         {
-            bulletManager.ReturnBullet(this.gameObject);
-            enemyBehavior.Reset();
-            Debug.Log("collision ! rest both ");
+            bulletManager.ReturnBullet(this.gameObject, bulletType);
         }
     }
 }

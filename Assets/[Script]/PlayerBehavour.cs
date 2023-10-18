@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerBehavour : MonoBehaviour
 {
+    private ScoreManager scoreManager;
     [SerializeField]
     [Header("Bullet Properties")]
     public Transform bulletSpawnPoint;
@@ -34,6 +36,8 @@ public class PlayerBehavour : MonoBehaviour
         bulletManager = FindObjectOfType<BulletManager>();
 
         InvokeRepeating("FireBullets", 0.0f, fireRate);
+
+        scoreManager = FindObjectOfType<ScoreManager>();
 
     }
 
@@ -110,6 +114,6 @@ public class PlayerBehavour : MonoBehaviour
 
     void FireBullets()
     {
-        var bullet = bulletManager.GetBullet(bulletSpawnPoint.position, BulletDirection.UP);
+        var bullet = bulletManager.GetBullet(bulletSpawnPoint.position, BulletType.PLAYER);
     }
 }
